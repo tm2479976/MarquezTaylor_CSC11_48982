@@ -1,5 +1,5 @@
 # Makefile
-all : prog10
+all : prog10a
 
 prog10a: prog10a.o
 	gcc -o $@ $+
