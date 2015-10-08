@@ -9,29 +9,29 @@ _start:
 
 _if_R1_eq_1:
 	CMP R1, #1
-	BNE _if_R1_eq_2
+	BNE _elseif2
 	MOV R0, #11
 	BAL _output
 
-_if_R1_eq_2:
+_elseif2:
 	CMP R1, #2
-	BNE _if_R1_eq_3
+	BNE _elseif3
 	MOV R0, #5
 	BAL _output
 
-_if_R1_eq_3:
+_elseif3:
 	CMP R1, #3
-	BNE _if_R1_eq_4
+	BNE _elseif4
 	MOV R0, #11
 	BAL _output
 
-_if_R1_eq_4:
+_elseif4:
 	CMP R1, #4
-	BNE _if_R1_eq_5
+	BNE _elseif5
 	MOV R0, #5
 	BAL _output
 
-_if_R1_eq_5:
+_elseif5:
 	CMP R1, #5
 	BNE _else
 	MOV R0, #1
