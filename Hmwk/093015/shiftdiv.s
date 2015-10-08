@@ -6,7 +6,7 @@
 
 _start:
 	MOV R0, #0	@counter
-	MOV R1, #45	@dividend
+	MOV R1, #46	@dividend
 	MOV R2, #6	@divisor
 	MOV R3, #1	@scale
 

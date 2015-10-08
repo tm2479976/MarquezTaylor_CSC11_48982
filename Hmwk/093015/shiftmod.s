@@ -6,7 +6,7 @@
 	.global _start
 
 _start:
-	MOV R1, #45	@Dividend
+	MOV R1, #46	@Dividend
 	MOV R2, #6	@Divisor
 
 _shftlt:
