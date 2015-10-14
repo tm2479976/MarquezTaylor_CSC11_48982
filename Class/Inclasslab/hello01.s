@@ -21,7 +21,7 @@ main:
 					/* lr ← address of next instruction */
 	ldr r1, address_of_return       /* r1 ← &address_of_return */
 	ldr lr, [r1]			/* lr ← *r1 */
-	bx lr                          /* return from main */
+	bx lr                           /* return from main */
 
 address_of_greeting: .word greeting
 address_of_return: .word return
