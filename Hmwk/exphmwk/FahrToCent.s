@@ -1,26 +1,33 @@
+.data
+
 .balign 4
 outMessage: .asciz "%d\t%d\n"
 
 .balign 4
 FCMessage: .asciz "F\tC\n"
 
+.text
+
 	.global FahrToCent
 
 FahrToCent:
-	push {lr}
-	ldr r0, =FCMessage
-	bl printf
+	PUSH {lr}
+	LDR r0, =FCMessage
+	BL printf
+
 fahrloop:
-	ldr r4, =0x008E38 	@bp -16
-	ldr r0, =outMessage
-	mov r1, r5
-	sub r2, r5, #32
-	mul r2, r2, r4
-	lsr r2, #16
-	bl printf
-	add r5, r5, #1
-        cmp r5, r6
-        ble fahrloop
-        bx lr
+	LDR r4, =0x008E39 	@bp -16
+	LDR r0, =outMessage
+	MOV r1, r5
+	SUB r2, r5, #32
+	MUL r2, r2, r4
+	LSR r2, #16
+	BL printf
+	ADD r5, r5, #1
+        CMP r5, r6
+        BLE fahrloop
+
+	POP {lr}
+	BX lr
 
 .global printf

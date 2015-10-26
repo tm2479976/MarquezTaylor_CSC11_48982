@@ -61,16 +61,20 @@ main:
 	BNE exit
 
 choice1:
+	LDR R3, =inBegin
+	LDR R4, =inEnd
 	BL CentToFahr
 	BAL exit
 
-choice2
+choice2:
 	BL FahrToCent
-	exit	
+	BAL exit
 
 exit:
-	pop {lr}
-	bx lr
+	POP {lr}
+	BX lr
+	MOV R7, #0
+	SWI 0
 
 inBeginAddr: .word inBegin
 inEndAddr: .word inEnd
