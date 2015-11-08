@@ -13,7 +13,10 @@ outLetter2: .asciz "%c%c%c "
 inLetter: .word 0
 
 .balign 4
-outNotFound: .asciz "%c is not in word\n%d chances remain\n"
+outNotFound: .asciz "%c is not in word\n"
+
+.balign 4
+outChances: .asciz "%d chances remain\n"
 
 .balign 4
 outUsed: .asciz "%c has already been used\n"
@@ -125,12 +128,16 @@ lettery:
 notFound:
 	/*Display message for incorrect guesses*/
 	LDR R0, =outNotFound
-	MOV R2, R4
 	BL printf
 
 	SUB R4, R4, #1		@R4--
 	CMP R4, #0		@check if any chances remain
 	BLE failure
+
+	/*Display message for remaining chances*/
+	LDR R0, =outChances
+	MOV R1, R4
+	BL printf
 
 	B loop			@return to loop if any chances remain
 
