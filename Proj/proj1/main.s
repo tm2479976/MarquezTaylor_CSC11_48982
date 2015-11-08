@@ -15,7 +15,7 @@ rdnWord: .word 0
 	.global main
 
 main:
-	push {r4,lr}
+	PUSH {r4,lr}
 
 	LDR R0, =outstart1
 	BL printf
@@ -67,7 +67,7 @@ wrd4:
 	B exit
 
 exit:
-	push {r4,lr}
+	POP {r4,lr}
     	BX lr
 
 /*external functions*/
