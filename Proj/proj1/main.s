@@ -25,38 +25,38 @@ main:
 
 	MOV R4, #1	@randomize later
 
-	CMP R4, #0	
-	BEQ word0
+	CMP R4, #0
+	BEQ wrd0
 
-	CMP R4, #1	
-	BEQ word1
+	CMP R4, #1
+	BEQ wrd1
 
-	CMP R4, #2	
-	BEQ word2
+	CMP R4, #2
+	BEQ wrd2
 
-	CMP R4, #3	
-	BEQ word3
+	CMP R4, #3
+	BEQ wrd3
 
-	CMP R4, #4	
-	BEQ word4
+	CMP R4, #4
+	BEQ wrd4
 
-word0:
+wrd0:
 	BL word0
 	B exit
 
-word1:
+wrd1:
 	BL word1
 	B exit
 
-word2:
+wrd2:
 	BL word2
 	B exit
 
-word3:
+wrd3:
 	BL word3
 	B exit
 
-word4:
+wrd4:
 	BL word4
 	B exit
 

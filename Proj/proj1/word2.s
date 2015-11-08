@@ -16,10 +16,10 @@ outNotFound: .asciz "%c is not in word\n"
 outRepeat: .asciz "%c has already been used\n"
 
 .balign 4
-outLose: .asciz "You die, So sad. :(\n"
+outFailure: .asciz "You die, So sad. :(\n"
 
 .balign 4
-outWin: .asciz "You're Winner!\n"
+outSuccess: .asciz "You're Winner!\n"
 
 .balign 4
 outWord: .asciz "Who's that Pokemon?\n\nIts Meowth!!\n"
@@ -37,7 +37,7 @@ word2:
 
 	MOV R5, #6	@remaining chances
 	MOV R6, #6	@unsolved letters
-	MOV R7, #42	@"*" as placeholer for unsolved letters
+	MOV R7, #42	@'*' as placeholer for unsolved letters
 	MOV R8, #42
 	MOV R9, #42
 	MOV R10, #42
@@ -52,17 +52,17 @@ loop:
 	bl printf
 
 	LDR R0, =outLetter
-	MOV R1, 10
-	MOV R2, 11
-	MOV R3, 12
+	MOV R1, R10
+	MOV R2, R11
+	MOV R3, R12
 	BL printf
 
-	LDR R0, scanPattern
+	LDR R0, =scanPattern
 	LDR R1, =inLetter
 	BL scanf
-	LDR R1, inWageAddr
+	LDR R1, inLetterAddr
 	LDR R1, [R1]
-	
+
 	CMP R1, #109
 	BEQ letterm
 
@@ -120,13 +120,13 @@ notFound:
 	SUB R5, R5, #1
 	CMP R5, #0
 	BLE failure
-	
+
 	B loop
 
 checkUnsolved:
 	CMP R6, #0
 	BLE success
-	B Loop 
+	B loop
 
 repeat:
 	LDR R0, =outRepeat
@@ -150,7 +150,6 @@ success:
 	BL printf
 
 	B finish
-	
 
 finish:
 	LDR lr, return4Addr
@@ -158,3 +157,4 @@ finish:
 	BX lr
 
 return4Addr: .word return4
+inLetterAddr: .word inLetter
