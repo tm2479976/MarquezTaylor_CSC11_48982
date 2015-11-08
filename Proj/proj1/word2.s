@@ -7,22 +7,22 @@ scanPattern: .asciz " %c"
 outLetter: .asciz "%c%c%c"
 
 .balign 4
+outLetter2: .asciz "%c%c%c "
+
+.balign 4
 inLetter: .word 0
 
 .balign 4
 outNotFound: .asciz "%c is not in word\n"
 
 .balign 4
-outRepeat: .asciz "%c has already been used\n"
+outUsed: .asciz "%c has already been used\n"
 
 .balign 4
-outFailure: .asciz "You die, So sad. :(\n"
+outFailure: .asciz "You die, So sad. :(\nWho's that Pokemon?\n\nIt was Meowth...\n"
 
 .balign 4
-outSuccess: .asciz "You're Winner!\n"
-
-.balign 4
-outWord: .asciz "Who's that Pokemon?\n\nIts Meowth!!\n"
+outSuccess: .asciz "You're Winner!\nWho's that Pokemon?\n\nIts Meowth!!\n"
 
 .balign 4
 return4: .word 0
@@ -35,26 +35,26 @@ word2:
 	LDR R2, return4Addr
 	STR lr, [R2]
 
-	MOV R5, #6	@remaining chances
-	MOV R6, #6	@unsolved letters
-	MOV R7, #42	@'*' as placeholer for unsolved letters
+	MOV R4, #6	@remaining chances
+	MOV R5, #6	@unsolved letters
+	MOV R6, #42	@'*' as placeholer for unsolved letters
+	MOV R7, #42
 	MOV R8, #42
 	MOV R9, #42
 	MOV R10, #42
 	MOV R11, #42
-	MOV R12, #42
 
 loop:
 	LDR R0, =outLetter
-	MOV R1, R7
-	MOV R2, R8
-	MOV R3, R9
+	MOV R1, R6
+	MOV R2, R7
+	MOV R3, R8
 	bl printf
 
-	LDR R0, =outLetter
-	MOV R1, R10
-	MOV R2, R11
-	MOV R3, R12
+	LDR R0, =outLetter2
+	MOV R1, R9
+	MOV R2, R10
+	MOV R3, R11
 	BL printf
 
 	LDR R0, =scanPattern
@@ -84,52 +84,64 @@ loop:
 	B notFound
 
 letterm:
-	MOV R1, R7
-	SUB R6, R6, #1
+	CMP R6, R1
+	BEQ used
+	MOV R6, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 lettere:
-	MOV R1, R8
-	SUB R6, R6, #1
+	CMP R7, R1
+	BEQ used
+	MOV R7, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 lettero:
-	MOV R1, R9
-	SUB R6, R6, #1
+	CMP R8, R1
+	BEQ used
+	MOV R8, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 letterw:
-	MOV R1, R10
-	SUB R6, R6, #1
+	CMP R9, R1
+	BEQ used
+	MOV R9, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 lettert:
-	MOV R1, R11
-	SUB R6, R6, #1
+	CMP R10, R1
+	BEQ used
+	MOV R10, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 letterh:
-	MOV R1, R12
-	SUB R6, R6, #1
+	CMP R11, R1
+	BEQ used
+	MOV R11, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 notFound:
 	LDR R0, =outNotFound
 	BL printf
 
-	SUB R5, R5, #1
-	CMP R5, #0
+	SUB R4, R4, #1
+	CMP R4, #0
 	BLE failure
 
 	B loop
 
 checkUnsolved:
-	CMP R6, #0
+	CMP R5, #0
 	BLE success
 	B loop
 
-repeat:
-	LDR R0, =outRepeat
+used:
+	LDR R0, =outUsed
 	BL printf
 	B loop
 
