@@ -13,7 +13,7 @@ outLetter2: .asciz "%c%c%c "
 inLetter: .word 0
 
 .balign 4
-outNotFound: .asciz "%c is not in word\n"
+outNotFound: .asciz "%c is not in word\n%d chances remain\n"
 
 .balign 4
 outUsed: .asciz "%c has already been used\n"
@@ -42,7 +42,7 @@ word0:
 
 loop:
 	/*Display in sets of three*/
-	LDR R0, =outLetter	
+	LDR R0, =outLetter
 	MOV R1, R6		@first letter
 	MOV R2, R7		@second letter
 	MOV R3, R8		@third letter
@@ -54,7 +54,7 @@ loop:
 	MOV R3, R11		@sixth letter
 	BL printf
 
-	LDR R0, =scanPattern	
+	LDR R0, =scanPattern
 	LDR R1, =inLetter
 	BL scanf
 	LDR R1, inLetterAddr
@@ -83,15 +83,15 @@ loop:
 letterp:
 	CMP R6, R1		@check if used already
 	BEQ used
-	MOV R6, R1		
-	SUB R5, R5, #1		
+	MOV R6, R1
+	SUB R5, R5, #1
 	B checkUnsolved
 
 letteri:
 	CMP R7, R1		@check if used already
 	BEQ used
 	MOV R7, R1
-	SUB R5, R5, #1		
+	SUB R5, R5, #1
 	B checkUnsolved
 
 letterd:
@@ -125,6 +125,7 @@ lettery:
 notFound:
 	/*Display message for incorrect guesses*/
 	LDR R0, =outNotFound
+	MOV R2, R4
 	BL printf
 
 	SUB R4, R4, #1		@R4--
@@ -134,13 +135,13 @@ notFound:
 	B loop			@return to loop if any chances remain
 
 checkUnsolved:
-	CMP R5, #0		@check if all letters solved	
+	CMP R5, #0		@check if all letters solved
 	BLE success
 	B loop			@return to loop if not
 
 used:
 	/*Display message for repeat guesses*/
-	LDR R0, =outUsed	
+	LDR R0, =outUsed
 	BL printf
 	B loop
 

@@ -1,11 +1,19 @@
 .data
 
+.balign 4
+scanpattern: .asciz " %c"
 
 .balign 4
-outstart1: .asciz "...Something Something Hangman!!\n"
+outstart1: .asciz "Welcome to Hangman!\n"
 
 .balign 4
-outstart2: .asciz "Only lowercase letters are permitted\nYou are allowed six errors\n\n"
+outstart2: .asciz "Only lowercase letters are permitted\nYou are allowed six errors\n"
+
+.balign 4
+outReplay: .asciz "Would you like to play again? y/n\n"
+
+.balign 4
+inReplay: .word 0
 
 .balign 4
 rdnWord: .word 0
@@ -23,6 +31,7 @@ main:
 	LDR R0, =outstart2
 	BL printf
 
+randomize:
 	/*Set random value*/
 	MOV R0, #0
     	BL time
@@ -49,27 +58,45 @@ main:
 
 wrd0:
 	BL word0
-	B exit
+	B replay
 
 wrd1:
 	BL word1
-	B exit
+	B replay
 
 wrd2:
 	BL word2
-	B exit
+	B replay
 
 wrd3:
 	BL word3
-	B exit
+	B replay
 
 wrd4:
 	BL word4
-	B exit
+	B replay
+
+replay:
+	LDR R0, =outReplay
+	BL printf
+
+	LDR R0, =scanpattern
+	LDR R1, =inReplay
+	BL scanf
+	LDR R1, inReplayAddr
+	LDR R1, [R1]
+
+	CMP R1, #121
+	BEQ randomize
+
+	CMP R1, #110
+	BEQ exit
 
 exit:
 	POP {r4,lr}	@leave main
     	BX lr
+
+inReplayAddr: .word inReplay
 
 /*external functions*/
 .global scanf
