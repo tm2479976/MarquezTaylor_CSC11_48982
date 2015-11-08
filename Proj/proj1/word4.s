@@ -7,6 +7,9 @@ scanPattern: .asciz " %c"
 outLetter: .asciz "%c%c%c"
 
 .balign 4
+outLetter2: .asciz "%c%c%c "
+
+.balign 4
 inLetter: .word 0
 
 .balign 4
@@ -48,7 +51,7 @@ loop:
 	MOV R3, R8
 	bl printf
 
-	LDR R0, =outLetter
+	LDR R0, =outLetter2
 	MOV R1, R9
 	MOV R2, R10
 	MOV R3, R11

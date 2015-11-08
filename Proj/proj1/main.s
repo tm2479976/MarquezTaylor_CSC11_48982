@@ -15,7 +15,7 @@ rdnWord: .word 0
 	.global main
 
 main:
-	PUSH {lr}
+	push {r4,lr}
 
 	LDR R0, =outstart1
 	BL printf
@@ -23,21 +23,27 @@ main:
 	LDR R0, =outstart2
 	BL printf
 
-	MOV R4, #4	@randomize later
+	MOV R0, #0
+    	BL time
+    	BL srand
+    	BL rand
+    	MOV R1, R0, ASR #1
+    	MOV R2, #5
+    	BL divMod
 
-	CMP R4, #0
+	CMP R1, #0
 	BEQ wrd0
 
-	CMP R4, #1
+	CMP R1, #1
 	BEQ wrd1
 
-	CMP R4, #2
+	CMP R1, #2
 	BEQ wrd2
 
-	CMP R4, #3
+	CMP R1, #3
 	BEQ wrd3
 
-	CMP R4, #4
+	CMP R1, #4
 	BEQ wrd4
 
 wrd0:
@@ -61,13 +67,12 @@ wrd4:
 	B exit
 
 exit:
-	POP {lr}
+	push {r4,lr}
     	BX lr
 
+/*external functions*/
 .global scanf
 .global printf
-.global word0
-.global word1
-.global word2
-.global word3
-.global word4
+.global time
+.global srand
+.global rand
