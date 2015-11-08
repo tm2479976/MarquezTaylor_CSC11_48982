@@ -5,7 +5,7 @@
 outstart1: .asciz "...Something Something Hangman!!\n"
 
 .balign 4
-outstart2: .asciz "You are allowed five errors\n"
+outstart2: .asciz "Only lowercase letters are permitted\nYou are allowed six errors\n\n"
 
 .balign 4
 rdnWord: .word 0
@@ -23,6 +23,7 @@ main:
 	LDR R0, =outstart2
 	BL printf
 
+	/*Set random value*/
 	MOV R0, #0
     	BL time
     	BL srand
@@ -31,19 +32,19 @@ main:
     	MOV R2, #5
     	BL divMod
 
-	CMP R1, #0
+	CMP R1, #0	@branch if random number was 0
 	BEQ wrd0
 
-	CMP R1, #1
+	CMP R1, #1	@branch if random number was 1
 	BEQ wrd1
 
-	CMP R1, #2
+	CMP R1, #2	@branch if random number was 2
 	BEQ wrd2
 
-	CMP R1, #3
+	CMP R1, #3	@branch if random number was 3
 	BEQ wrd3
 
-	CMP R1, #4
+	CMP R1, #4	@branch if random number was 4
 	BEQ wrd4
 
 wrd0:
@@ -67,7 +68,7 @@ wrd4:
 	B exit
 
 exit:
-	POP {r4,lr}
+	POP {r4,lr}	@leave main
     	BX lr
 
 /*external functions*/

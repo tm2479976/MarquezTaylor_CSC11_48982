@@ -24,20 +24,16 @@ outFailure: .asciz "You die, So sad. :(\nWho's that Pokemon?\n\nIt was Espurr...
 .balign 4
 outSuccess: .asciz "You're Winner!\nWho's that Pokemon?\n\nIts Espurr!!\n"
 
-.balign 4
-return6: .word 0
-
 .text
 
 	.global word4
 
 word4:
-	LDR R2, return6Addr
-	STR lr, [R2]
+	POP {lr}
 
-	MOV R4, #6	@remaining chances
-	MOV R5, #6	@unsolved letters
-	MOV R6, #42	@'*' as placeholer for unsolved letters
+	MOV R4, #6		@remaining chances
+	MOV R5, #6		@unsolved letters
+	MOV R6, #42		@'*' as placeholer for unsolved letters
 	MOV R7, #42
 	MOV R8, #42
 	MOV R9, #42
@@ -46,15 +42,15 @@ word4:
 
 loop:
 	LDR R0, =outLetter
-	MOV R1, R6
-	MOV R2, R7
-	MOV R3, R8
+	MOV R1, R6		@first letter
+	MOV R2, R7		@second letter
+	MOV R3, R8		@third letter
 	bl printf
 
 	LDR R0, =outLetter2
-	MOV R1, R9
-	MOV R2, R10
-	MOV R3, R11
+	MOV R1, R9		@fourth letter
+	MOV R2, R10		@fifth letter
+	MOV R3, R11		@sixth letter
 	BL printf
 
 	LDR R0, =scanPattern
@@ -63,53 +59,53 @@ loop:
 	LDR R1, inLetterAddr
 	LDR R1, [R1]
 
-	CMP R1, #101
+	CMP R1, #101		@check if inLetter = 'e'
 	BEQ lettere
 
-	CMP R1, #115
+	CMP R1, #115		@check if inLetter = 's'
 	BEQ letters
 
-	CMP R1, #112
+	CMP R1, #112		@check if inLetter = 'p'
 	BEQ letterp
 
-	CMP R1, #117
+	CMP R1, #117		@check if inLetter = 'u'
 	BEQ letteru
 
-	CMP R1, #114
+	CMP R1, #114		@check if inLetter = 'r'
 	BEQ letterr
 
-	B notFound
+	B notFound		@branch if none of the above
 
 lettere:
-	CMP R6, R1
+	CMP R6, R1		@check if used already
 	BEQ used
 	MOV R6, R1
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letters:
-	CMP R7, R1
+	CMP R7, R1		@check if used already
 	BEQ used
 	MOV R7, R1
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letterp:
-	CMP R8, R1
+	CMP R8, R1		@check if used already
 	BEQ used
 	MOV R8, R1
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letteru:
-	CMP R9, R1
+	CMP R9, R1		@check if used already
 	BEQ used
 	MOV R9, R1
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letterr:
-	CMP R10, R1
+	CMP R10, R1		@check if used already
 	BEQ used
 	MOV R10, R1
 	MOV R11, R1
@@ -117,41 +113,44 @@ letterr:
 	B checkUnsolved
 
 notFound:
+	/*Display message for incorrect guesses*/
 	LDR R0, =outNotFound
 	BL printf
 
-	SUB R4, R4, #1
-	CMP R4, #0
+	SUB R4, R4, #1		@R4--
+	CMP R4, #0		@check if any chances remain
 	BLE failure
 
-	B loop
+	B loop			@return to loop if any chances remain
 
 checkUnsolved:
-	CMP R5, #0
+	CMP R5, #0		@check if all letters solved
 	BLE success
-	B loop
+	B loop			@return to loop if not
 
 used:
+	/*Display message for repeat guesses*/
 	LDR R0, =outUsed
 	BL printf
 	B loop
 
 failure:
+	/*Display message for failed game*/
 	LDR R0, =outFailure
 	BL printf
 
 	B finish
 
 success:
+	/*Display message for successful game*/
 	LDR R0, =outSuccess
 	BL printf
 
 	B finish
 
 finish:
-	LDR lr, return6Addr
-	LDR lr, [lr]
+	/*return to main*/
+	POP {lr}
 	BX lr
 
-return6Addr: .word return6
 inLetterAddr: .word inLetter
