@@ -22,9 +22,6 @@ outFailure: .asciz "You die, So sad. :(\nWho's that Pokemon?\n\nIt was Espurr...
 outSuccess: .asciz "You're Winner!\nWho's that Pokemon?\n\nIts Espurr!!\n"
 
 .balign 4
-outWord: .asciz "Who's that Pokemon?\n\nIts Espurr!!\n"
-
-.balign 4
 return6: .word 0
 
 .text
@@ -104,7 +101,7 @@ letterp:
 letteru:
 	CMP R9, R1
 	BEQ used
-	MOV R9, R10
+	MOV R9, R1
 	SUB R5, R5, #1
 	B checkUnsolved
 
@@ -140,16 +137,10 @@ failure:
 	LDR R0, =outFailure
 	BL printf
 
-	LDR R0, =outWord
-	BL printf
-
 	B finish
 
 success:
 	LDR R0, =outSuccess
-	BL printf
-
-	LDR R0, =outWord
 	BL printf
 
 	B finish

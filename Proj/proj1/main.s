@@ -23,7 +23,7 @@ main:
 	LDR R0, =outstart2
 	BL printf
 
-	MOV R4, #1	@randomize later
+	MOV R4, #4	@randomize later
 
 	CMP R4, #0
 	BEQ wrd0

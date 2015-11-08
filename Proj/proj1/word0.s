@@ -54,7 +54,7 @@ loop:
 	LDR R0, =outLetter2
 	MOV R1, R9
 	MOV R2, R10
-	MOV R3, R12
+	MOV R3, R11
 	BL printf
 
 	LDR R0, =scanPattern

@@ -149,16 +149,10 @@ failure:
 	LDR R0, =outFailure
 	BL printf
 
-	LDR R0, =outWord
-	BL printf
-
 	B finish
 
 success:
 	LDR R0, =outSuccess
-	BL printf
-
-	LDR R0, =outWord
 	BL printf
 
 	B finish
