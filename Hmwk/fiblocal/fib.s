@@ -31,7 +31,7 @@ fibonacci:
 	B end
 
 loop:
-	CMP R8, R0		/*branch when R2==R0*/
+	CMP R8, R0		/*branch when R8==R0*/
 	BGT is_positive
 	ADD R2, R2, #4		/*R2+=4*/
 	ADD R3, R3, #4		/*R3+=4*/
@@ -40,7 +40,7 @@ loop:
 	LDR R6, [R1, R3]	/*R6=*(R1+4)*/
 	ADD R7, R5, R6		/*R7=R5+R6*/
 	STR R7, [R1, R4]	/*R5=*(R1+R4)*/
-	ADD R8, R8, #1		/*R2++*/
+	ADD R8, R8, #1		/*R8++*/
 	B loop
 
 is_gt_45:
