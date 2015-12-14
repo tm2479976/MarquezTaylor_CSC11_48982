@@ -43,7 +43,9 @@ word0:
 	LDR R6, =unknown	@'*' as placeholer for unsolved letters
 	MOV R7, #42
 	MOV R8, sp
+	LDR R9, =word
 
+	/*initialize unkown*/
 	STR R7, [R6]
 	STR R7, [R6, +#4]
 	STR R7, [R6, +#8]
@@ -51,17 +53,18 @@ word0:
 	STR R7, [R6, +#16]
 	STR R7, [R6, +#20]
 
-	MOV R7, #112
+	/*set local array*/
+	LDR R7, [R9]
 	STR R7, [R8]
-	MOV R7, #105
+	LDR R7, [R9, +#4]
 	STR R7, [R8, +#4]
-	MOV R7, #100
+	LDR R7, [R9, +#8]
 	STR R7, [R8, +#8]
-	MOV R7, #103
+	LDR R7, [R9, +#12]
 	STR R7, [R8, +#12]
-	MOV R7, #101
+	LDR R7, [R9, +#16]
 	STR R7, [R8, +#16]
-	MOV R7, #121
+	LDR R7, [R9, +#20]
 	STR R7, [R8, +#20]
 
 	MOV R9, #42
