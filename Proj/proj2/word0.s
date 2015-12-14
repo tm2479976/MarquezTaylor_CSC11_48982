@@ -25,7 +25,7 @@ outChances: .asciz "%d chances remain\n"
 outUsed: .asciz "%c has already been used\n"
 
 .balign 4
-outFailure: .asciz "You died...\n The word you were looking for was %c%c%c"
+outFailure: .asciz "You died...\nThe word you were looking for was %c%c%c"
 
 .balign 4
 outSuccess: .asciz "Congratulations you figured it out!\nThe answer was %c%c%c"
@@ -49,7 +49,6 @@ word0:
 
 	MOV R0, #4
 	MUL R1, R1, R0
-	//LSL R1, R1, #2
 	LDR R3, =index
 	LDR R10, [R3, +R1]
 
@@ -207,15 +206,16 @@ used:
 failure:
 	/*Display message for failed game*/
 	LDR R0, =outFailure
-	LDR R1, [R6]		@first letter
-	LDR R2, [R6, +#4]	@second letter
-	LDR R3, [R6, +#8]	@third letter
+	LDR R1, [R8]		@first letter
+	LDR R2, [R8, +#4]	@second letter
+	LDR R3, [R8, +#8]	@third letter
 	BL printf
 
 	LDR R0, =outLetter3
-	LDR R1, [R6, +#12]		@fourth letter
-	LDR R2, [R6, +#16]		@fifth letter
-	LDR R3, [R6, +#20]		@sixth letter
+	LDR R1, [R8, +#12]		@fourth letter
+	LDR R2, [R8, +#16]		@fifth letter
+	LDR R3, [R8, +#20]		@sixth letter
+	BL printf
 
 	B finish
 

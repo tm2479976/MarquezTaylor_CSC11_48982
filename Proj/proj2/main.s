@@ -48,41 +48,7 @@ randomize:
     	MOV R1, R0, ASR #1
     	MOV R2, #12
     	BL divMod
-
-	CMP R1, #0	@branch if random number was 0
-	BEQ wrd0
-
-	CMP R1, #1	@branch if random number was 1
-	BEQ wrd0
-
-	CMP R1, #2	@branch if random number was 2
-	BEQ wrd0
-
-	CMP R1, #3	@branch if random number was 3
-	BEQ wrd0
-
-	CMP R1, #4	@branch if random number was 4
-	BEQ wrd0
-
-wrd0:
 	BL word0
-	B replay
-
-wrd1:
-	BL word1
-	B replay
-
-wrd2:
-	BL word2
-	B replay
-
-wrd3:
-	BL word3
-	B replay
-
-wrd4:
-	BL word4
-	B replay
 
 replay:
 	LDR R0, =outReplay
