@@ -44,21 +44,11 @@ word0:
 	MOV R8, sp
 	LDR R9, =words
 
-	/*Set random value*/
-	MOV R0, #0
-    	BL time
-    	BL srand
-    	BL rand
-    	MOV R1, R0, ASR #1
-    	MOV R2, #5
-    	BL divMod
-
 	MOV R0, #8
 	MUL R1, R1, R0
 	LDR R3, =index
-	LDR R10, [R3, +R0]
+	LDR R10, [R3, +R1]
 
-initun:
 	/*initialize unknown*/
 	MOV R7, #42
 	STR R7, [R6]
@@ -109,76 +99,62 @@ loop:
 
 	LDR R7, [R8]
 	CMP R1, R7		@check if inLetter = 'p'
-	BEQ letterp
-
-	LDR R7, [R8, +#4]
-	CMP R1, R7		@check if inLetter = 'i'
-	BEQ letteri
-
-	LDR R7, [R8, +#8]
-	CMP R1, R7		@check if inLetter = 'd'
-	BEQ letterd
-
-	LDR R7, [R8, +#12]
-	CMP R1, R7		@check if inLetter = 'g'
-	BEQ letterg
-
-	LDR R7, [R8, +#16]
-	CMP R1, R7		@check if inLetter = 'e'
-	BEQ lettere
-
-	LDR R7, [R8, +#20]
-	CMP R1, R7		@check if inLetter = 'y'
-	BEQ lettery
-
-	B notFound		@branch if none of the above
-
-letterp:
+	BNE letter2
 	LDR R7, [R6]
 	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6]
 	SUB R5, R5, #1
-	B checkUnsolved
 
-letteri:
+letter2:
+	LDR R7, [R8, +#4]
+	CMP R1, R7		@check if inLetter = 'i'
+	BNE letter3
 	LDR R7, [R6, +#4]
 	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6, +#4]
 	SUB R5, R5, #1
-	B checkUnsolved
 
-letterd:
+letter3:
+	LDR R7, [R8, +#8]
+	CMP R1, R7		@check if inLetter = 'd'
+	BNE letter4
 	LDR R7, [R6, +#8]
 	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6, +#8]
 	SUB R5, R5, #1
-	B checkUnsolved
 
-letterg:
+letter4:
+	LDR R7, [R8, +#12]
+	CMP R1, R7		@check if inLetter = 'g'
+	BNE letter5
 	LDR R7, [R6, +#12]
 	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6, +#12]
 	SUB R5, R5, #1
-	B checkUnsolved
 
-lettere:
+letter5:
+	LDR R7, [R8, +#16]
+	CMP R1, R7		@check if inLetter = 'e'
+	BNE letter6
 	LDR R7, [R6, +#16]
 	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6, +#16]
 	SUB R5, R5, #1
-	B checkUnsolved
 
-lettery:
+letter6:
+	LDR R7, [R8, +#20]
+	CMP R1, R7		@check if inLetter = 'y'
+	BNE notFound		@branch if none of the above
 	LDR R7, [R6, +#20]
 	CMP R1, R7		@check if used already
 	BEQ used
