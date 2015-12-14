@@ -44,6 +44,15 @@ word0:
 	MOV R8, sp
 	LDR R9, =words
 
+	/*Set random value*/
+	MOV R0, #0
+    	BL time
+    	BL srand
+    	BL rand
+    	MOV R1, R0, ASR #1
+    	MOV R2, #5
+    	BL divMod
+
 	MOV R0, #8
 	MUL R1, R1, R0
 	LDR R3, =index
