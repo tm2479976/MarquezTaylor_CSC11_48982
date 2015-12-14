@@ -19,7 +19,7 @@ inReplay: .word 0
 rdnWord: .word 0
 
 .balign
-words: .skip 144
+words: .skip 288
 
 .balign
 index: .skip 48
@@ -46,7 +46,7 @@ randomize:
     	BL srand
     	BL rand
     	MOV R1, R0, ASR #1
-    	MOV R2, #6
+    	MOV R2, #12
     	BL divMod
 
 	CMP R1, #0	@branch if random number was 0
@@ -91,7 +91,7 @@ replay:
 	LDR R0, =scanpattern
 	LDR R1, =inReplay
 	BL scanf
-	LDR R1, inReplayAddr
+	LDR R1, =inReplay
 	LDR R1, [R1]
 
 	CMP R1, #121
@@ -103,8 +103,6 @@ replay:
 exit:
 	POP {r4,lr}	@leave main
     	BX lr
-
-inReplayAddr: .word inReplay
 
 /*externals*/
 .global scanf

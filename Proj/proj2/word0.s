@@ -10,6 +10,9 @@ outLetter: .asciz "%c%c%c"
 outLetter2: .asciz "%c%c%c "
 
 .balign 4
+outLetter3: .asciz "%c%c%c\n"
+
+.balign 4
 inLetter: .word 0
 
 .balign 4
@@ -22,10 +25,10 @@ outChances: .asciz "%d chances remain\n"
 outUsed: .asciz "%c has already been used\n"
 
 .balign 4
-outFailure: .asciz "You die, So sad. :(\nWho's that Pokemon?\n\nIt was Pidgey...\n"
+outFailure: .asciz "You died...\n The word you were looking for was %c%c%c"
 
 .balign 4
-outSuccess: .asciz "You're Winner!\nWho's that Pokemon?\n\nIts Pidgey!!\n"
+outSuccess: .asciz "Congratulations you figured it out!\nThe answer was %c%c%c"
 
 .balign
 unknown: .skip 24
@@ -44,8 +47,9 @@ word0:
 	MOV R8, sp
 	LDR R9, =words
 
-	MOV R0, #8
+	MOV R0, #4
 	MUL R1, R1, R0
+	//LSL R1, R1, #2
 	LDR R3, =index
 	LDR R10, [R3, +R1]
 
@@ -203,13 +207,30 @@ used:
 failure:
 	/*Display message for failed game*/
 	LDR R0, =outFailure
+	LDR R1, [R6]		@first letter
+	LDR R2, [R6, +#4]	@second letter
+	LDR R3, [R6, +#8]	@third letter
 	BL printf
+
+	LDR R0, =outLetter3
+	LDR R1, [R6, +#12]		@fourth letter
+	LDR R2, [R6, +#16]		@fifth letter
+	LDR R3, [R6, +#20]		@sixth letter
 
 	B finish
 
 success:
 	/*Display message for successful game*/
 	LDR R0, =outSuccess
+	LDR R1, [R6]		@first letter
+	LDR R2, [R6, +#4]	@second letter
+	LDR R3, [R6, +#8]	@third letter
+	BL printf
+
+	LDR R0, =outLetter3
+	LDR R1, [R6, +#12]		@fourth letter
+	LDR R2, [R6, +#16]		@fifth letter
+	LDR R3, [R6, +#20]		@sixth letter
 	BL printf
 
 	B finish
