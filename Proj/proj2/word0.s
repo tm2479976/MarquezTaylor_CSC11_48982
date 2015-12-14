@@ -62,9 +62,9 @@ loop:
 	BL printf
 
 	LDR R0, =outLetter2
-	MOV R1, R9		@fourth letter
-	MOV R2, R10		@fifth letter
-	MOV R3, R11		@sixth letter
+	MOV R1, [R6, +#12]		@fourth letter
+	MOV R2, [R6, +#16]		@fifth letter
+	MOV R3, [R6, +#20]		@sixth letter
 	BL printf
 
 	LDR R0, =scanPattern
@@ -95,7 +95,7 @@ loop:
 
 letterp:
 	LDR R7, [R6]
-	CMP R6, R7		@check if used already
+	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
 	STR R7, [R6]
@@ -103,38 +103,47 @@ letterp:
 	B checkUnsolved
 
 letteri:
-	CMP R7, R1		@check if used already
+	LDR R7, [R6, +#4]
+	CMP R1, R7		@check if used already
 	BEQ used
 	MOV R7, R1
-	STR R7, [R6]
+	STR R7, [R6, +#4]
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letterd:
-	CMP R8, R1		@check if used already
+	LDR R7, [R6, +#8]
+	CMP R1, R7		@check if used already
 	BEQ used
-	MOV R8, R1
+	MOV R7, R1
+	STR R7, [R6, +#8]
 	SUB R5, R5, #1
 	B checkUnsolved
 
 letterg:
-	CMP R9, R1		@check if used already
+	LDR R7, [R6, +#12]
+	CMP R1, R7		@check if used already
 	BEQ used
-	MOV R9, R1
+	MOV R7, R1
+	STR R7, [R6, +#12]
 	SUB R5, R5, #1
 	B checkUnsolved
 
 lettere:
-	CMP R10, R1		@check if used already
+	LDR R7, [R6, +#16]
+	CMP R1, R7		@check if used already
 	BEQ used
-	MOV R10, R1
+	MOV R7, R1
+	STR R7, [R6, +#16]
 	SUB R5, R5, #1
 	B checkUnsolved
 
 lettery:
-	CMP R11, R1		@check if used already
+	LDR R7, [R6, +#20]
+	CMP R1, R7		@check if used already
 	BEQ used
-	MOV R11, R1
+	MOV R7, R1
+	STR R7, [R6, +#20]
 	SUB R5, R5, #1
 	B checkUnsolved
 
