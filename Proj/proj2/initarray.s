@@ -1,10 +1,3 @@
-.data
-
-.balign
-words: .skip 144
-
-index: .skip 48
-
 .text
 
 	.global initArray
@@ -27,10 +20,10 @@ initArray:
 	STR R5, [R1, +#16]
 	MOV R3, #121		@'y'
 	STR R5, [R1, +#20]
- 
+
 	MOV R3, #0		@location in words
 	STR R5, [R2]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#4]
 
 	/*initialize 'mewtwo'*/
@@ -46,10 +39,10 @@ initArray:
 	STR R5, [R1, +#40]
 	MOV R3, #111		@'o'
 	STR R5, [R1, +#44]
- 
+
 	MOV R3, #24		@location in words
 	STR R5, [R2, +#8]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#12]
 
 	/*initialize 'meowth'*/
@@ -65,10 +58,10 @@ initArray:
 	STR R5, [R1, +#64]
 	MOV R3, #104		@'h'
 	STR R5, [R1, +#68]
- 
+
 	MOV R3, #48		@location in words
 	STR R5, [R2, +#16]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#20]
 
 	/*initialize 'gengar'*/
@@ -84,13 +77,13 @@ initArray:
 	STR R5, [R1, +#88]
 	MOV R3, #114		@'r'
 	STR R5, [R1, +#92]
- 
+
 	MOV R3, #72		@location in words
 	STR R5, [R2, +#24]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#28]
 
-	/*initialize 'espurr'*/		
+	/*initialize 'espurr'*/
 	MOV R3, #101		@'e'
 	STR R5, [R1, +#96]
 	MOV R3, #115		@'s'
@@ -103,13 +96,13 @@ initArray:
 	STR R5, [R1, +#112]
 	MOV R3, #114		@'r'
 	STR R5, [R1, +#116]
- 
+
 	MOV R3, #96		@location in words
 	STR R5, [R2, +#32]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#36]
 
-	/*initialize 'skitty'*/		
+	/*initialize 'skitty'*/
 	MOV R3, #115		@'s'
 	STR R5, [R1, +#120]
 	MOV R3, #107		@'k'
@@ -122,16 +115,15 @@ initArray:
 	STR R5, [R1, +#136]
 	MOV R3, #121		@'y'
 	STR R5, [R1, +#140]
- 
+
 	MOV R3, #120		@location in words
 	STR R5, [R2, +#40]
-	MOV R3, #6		@length of word	
+	MOV R3, #6		@length of word
 	STR R5, [R2, +#44]
 
 	POP {R4, lr}
-	BX {lr}
+	BX lr
 
 
 wordsAddr: .word words
 indexAddr: .word index
-	

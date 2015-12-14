@@ -27,17 +27,27 @@ outFailure: .asciz "You die, So sad. :(\nWho's that Pokemon?\n\nIt was Pidgey...
 .balign 4
 outSuccess: .asciz "You're Winner!\nWho's that Pokemon?\n\nIts Pidgey!!\n"
 
+.balign
+unknown: .skip 24
+
 .text
 
 	.global word0
 
 word0:
 	PUSH {lr}
+	SUB sp, sp, #24		@make room for 6 4 integers in the stack
 
 	MOV R4, #6		@remaining chances
 	MOV R5, #6		@unsolved letters
-	MOV R6, #42		@'*' as placeholer for unsolved letters
+	LDR R6, =unknown	@'*' as placeholer for unsolved letters
 	MOV R7, #42
+	STR R7, [R6]
+	STR R7, [R6, +#4]
+	STR R7, [R6, +#8]
+	STR R7, [R6, +#12]
+	STR R7, [R6, +#16]
+	STR R7, [R6, +#20]
 	MOV R8, #42
 	MOV R9, #42
 	MOV R10, #42
@@ -46,9 +56,9 @@ word0:
 loop:
 	/*Display in sets of three*/
 	LDR R0, =outLetter
-	MOV R1, R6		@first letter
-	MOV R2, R7		@second letter
-	MOV R3, R8		@third letter
+	LDR R1, [R6]		@first letter
+	LDR R2, [R6, +#4]	@second letter
+	LDR R3, [R6, +#8]	@third letter
 	BL printf
 
 	LDR R0, =outLetter2
@@ -84,9 +94,11 @@ loop:
 	B notFound		@branch if none of the above
 
 letterp:
-	CMP R6, R1		@check if used already
+	LDR R7, [R6]
+	CMP R6, R7		@check if used already
 	BEQ used
-	MOV R6, R1
+	MOV R7, R1
+	STR R7, [R6]
 	SUB R5, R5, #1
 	B checkUnsolved
 
@@ -94,6 +106,7 @@ letteri:
 	CMP R7, R1		@check if used already
 	BEQ used
 	MOV R7, R1
+	STR R7, [R6]
 	SUB R5, R5, #1
 	B checkUnsolved
 

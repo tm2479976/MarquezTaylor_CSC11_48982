@@ -18,12 +18,20 @@ inReplay: .word 0
 .balign 4
 rdnWord: .word 0
 
+.balign
+words: .skip 144
+
+.balign
+index: .skip 48
+
 .text
 
 	.global main
 
 main:
 	PUSH {r4,lr}
+
+	BL initArray
 
 	LDR R0, =outstart1
 	BL printf
@@ -45,16 +53,16 @@ randomize:
 	BEQ wrd0
 
 	CMP R1, #1	@branch if random number was 1
-	BEQ wrd1
+	BEQ wrd0
 
 	CMP R1, #2	@branch if random number was 2
-	BEQ wrd2
+	BEQ wrd0
 
 	CMP R1, #3	@branch if random number was 3
-	BEQ wrd3
+	BEQ wrd0
 
 	CMP R1, #4	@branch if random number was 4
-	BEQ wrd4
+	BEQ wrd0
 
 wrd0:
 	BL word0
@@ -93,16 +101,16 @@ replay:
 	BEQ exit
 
 exit:
-	LDR R0, =words
-	LDR R0, [R0]
 	POP {r4,lr}	@leave main
     	BX lr
 
 inReplayAddr: .word inReplay
 
-/*external functions*/
+/*externals*/
 .global scanf
 .global printf
 .global time
 .global srand
 .global rand
+.global words
+.global index
