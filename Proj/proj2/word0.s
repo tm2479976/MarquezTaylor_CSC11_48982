@@ -30,6 +30,9 @@ outFailure: .asciz "You died...\nThe word you were looking for was %c%c%c"
 .balign 4
 outSuccess: .asciz "Congratulations you figured it out!\nThe answer was %c%c%c"
 
+balign 4
+outScore: .asciz "Your score for this round was %f!!!\n"
+
 .balign
 unknown: .skip 24
 
@@ -43,9 +46,9 @@ word0:
 
 	MOV R4, #6		@remaining chances
 	MOV R5, #6		@unsolved letters
-	LDR R6, =unknown	@'*' as placeholer for unsolved letters
-	MOV R8, sp
-	LDR R9, =words
+	LDR R6, =unknown	@array for portion of mystery word solved
+	MOV R8, sp		@array for mystery word
+	LDR R9, =words		@master list of words to take mystery word from
 
 	MOV R0, #4
 	MUL R1, R1, R0
@@ -53,7 +56,7 @@ word0:
 	LDR R10, [R3, +R1]
 
 	/*initialize unknown*/
-	MOV R7, #42
+	MOV R7, #42		@use '*' as placeholder for user word
 	STR R7, [R6]
 	STR R7, [R6, +#4]
 	STR R7, [R6, +#8]
@@ -62,8 +65,8 @@ word0:
 	STR R7, [R6, +#20]
 
 	/*set local array*/
-	LDR R7, [R9, +R10]
-	STR R7, [R8]
+	LDR R7, [R9, +R10]	@read from master list
+	STR R7, [R8]		@place on stack
 	ADD R10, R10, #4
 	LDR R7, [R9, +R10]
 	STR R7, [R8, +#4]
@@ -81,7 +84,8 @@ word0:
 	STR R7, [R8, +#20]
 
 loop:
-	MOV R9, #0
+	MOV R9, #0		@counter to check if guessed letter is in mystery word
+	MOV R11, #0		@counter for number of guesses
 
 	/*Display in sets of three*/
 	LDR R0, =outLetter
@@ -103,80 +107,81 @@ loop:
 	LDR R1, [R1]
 
 	LDR R7, [R8]
-	CMP R1, R7		@check if inLetter = 'p'
-	ADDNE R9, R9, #1
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
 	BNE letter2
 	LDR R7, [R6]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
-	STR R7, [R6]
-	SUB R5, R5, #1
+	MOV R7, R1		@reveal first letter
+	STR R7, [R6]		
+	SUB R5, R5, #1		@unsolvedletters-- 
 
 letter2:
 	LDR R7, [R8, +#4]
-	CMP R1, R7		@check if inLetter = 'i'
-	ADDNE R9, R9, #1
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
 	BNE letter3
 	LDR R7, [R6, +#4]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
+	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#4]
-	SUB R5, R5, #1
+	SUB R5, R5, #1		@unsolvedletters-- 
 
 letter3:
 	LDR R7, [R8, +#8]
-	CMP R1, R7		@check if inLetter = 'd'
-	ADDNE R9, R9, #1
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
 	BNE letter4
 	LDR R7, [R6, +#8]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
+	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#8]
-	SUB R5, R5, #1
+	SUB R5, R5, #1		@unsolvedletters-- 
 
 letter4:
 	LDR R7, [R8, +#12]
-	CMP R1, R7		@check if inLetter = 'g'
-	ADDNE R9, R9, #1
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
 	BNE letter5
 	LDR R7, [R6, +#12]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
+	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#12]
-	SUB R5, R5, #1
+	SUB R5, R5, #1		@unsolvedletters--
 
 letter5:
 	LDR R7, [R8, +#16]
-	CMP R1, R7		@check if inLetter = 'e'
-	ADDNE R9, R9, #1
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
 	BNE letter6
 	LDR R7, [R6, +#16]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
+	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#16]
-	SUB R5, R5, #1
+	SUB R5, R5, #1		@unsolvedletters--
 
 letter6:
 	LDR R7, [R8, +#20]
-	CMP R1, R7		@check if inLetter = 'y'
-	ADDNE R9, R9, #1
-	BNE notFound		@branch if none of the above
+	CMP R1, R7		@check for letter
+	ADDNE R9, R9, #1	@if (user's guess != letter) counter++
+	BNE notFound		@branch to check counter
 	LDR R7, [R6, +#20]
-	CMP R1, R7		@check if used already
+	CMP R1, R7		@check for repeat guess
 	BEQ used
-	MOV R7, R1
+	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#20]
-	SUB R5, R5, #1
+	SUB R5, R5, #1		@unsolvedletters--
 	B checkUnsolved
 
 notFound:
-	CMP R9, #6
+	CMP R9, #6		@check if guess not found in word
 	BLT checkUnsolved
+
 	/*Display message for incorrect guesses*/
 	LDR R0, =outNotFound
 	BL printf
@@ -217,7 +222,7 @@ failure:
 	LDR R3, [R8, +#20]		@sixth letter
 	BL printf
 
-	B finish
+	B score
 
 success:
 	/*Display message for successful game*/
@@ -233,7 +238,31 @@ success:
 	LDR R3, [R6, +#20]		@sixth letter
 	BL printf
 
-	B finish
+	B score
+
+score:
+	/*initialize floating point registers*/
+	MOV R0, #6
+	MOV R1, #100
+	VMOV S14, R0		@length of word=wl
+	VMOV S16, R4		@chances remaining=cr
+	VMOV S18, R5		@unsolved letters=ul
+	VMOV S20, R11		@number of guesses=ng
+	VMOV S22, R1		@score modifier=sm
+
+	/*calculations*/
+	VDIV.F32 S16, S16, S14	@s1 = cd/wl
+	VDIV.F32 S18, S18, S14	@s2 = ul/wl
+	VDIV.F32 S20, S14, S20	@s3 = wl/ng
+	VADD.F32 S16, S16, S18	@s4 = s1+s2
+	VADD.F32 S20, S20, S16	@s5 = s3+s4
+	VMUL.F32 S20, S20, S22  @final scoce = s5*sm
+	VCVT.F64.F32 D0, S20	@convert score for output
+
+	/*output*/
+	LDR R0, =outScore
+	VMOV R2, R3, D0
+	BL printf	
 
 finish:
 	/*return to main*/
