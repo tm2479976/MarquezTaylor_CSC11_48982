@@ -78,6 +78,8 @@ word0:
 	STR R7, [R8, +#20]
 
 loop:
+	MOV R9, #0
+
 	/*Display in sets of three*/
 	LDR R0, =outLetter
 	LDR R1, [R6]		@first letter
@@ -99,6 +101,7 @@ loop:
 
 	LDR R7, [R8]
 	CMP R1, R7		@check if inLetter = 'p'
+	ADDNE R9, R9, #1
 	BNE letter2
 	LDR R7, [R6]
 	CMP R1, R7		@check if used already
@@ -110,6 +113,7 @@ loop:
 letter2:
 	LDR R7, [R8, +#4]
 	CMP R1, R7		@check if inLetter = 'i'
+	ADDNE R9, R9, #1
 	BNE letter3
 	LDR R7, [R6, +#4]
 	CMP R1, R7		@check if used already
@@ -121,6 +125,7 @@ letter2:
 letter3:
 	LDR R7, [R8, +#8]
 	CMP R1, R7		@check if inLetter = 'd'
+	ADDNE R9, R9, #1
 	BNE letter4
 	LDR R7, [R6, +#8]
 	CMP R1, R7		@check if used already
@@ -132,6 +137,7 @@ letter3:
 letter4:
 	LDR R7, [R8, +#12]
 	CMP R1, R7		@check if inLetter = 'g'
+	ADDNE R9, R9, #1
 	BNE letter5
 	LDR R7, [R6, +#12]
 	CMP R1, R7		@check if used already
@@ -143,6 +149,7 @@ letter4:
 letter5:
 	LDR R7, [R8, +#16]
 	CMP R1, R7		@check if inLetter = 'e'
+	ADDNE R9, R9, #1
 	BNE letter6
 	LDR R7, [R6, +#16]
 	CMP R1, R7		@check if used already
@@ -154,6 +161,7 @@ letter5:
 letter6:
 	LDR R7, [R8, +#20]
 	CMP R1, R7		@check if inLetter = 'y'
+	ADDNE R9, R9, #1
 	BNE notFound		@branch if none of the above
 	LDR R7, [R6, +#20]
 	CMP R1, R7		@check if used already
@@ -164,6 +172,8 @@ letter6:
 	B checkUnsolved
 
 notFound:
+	CMP R9, #6
+	BLT checkUnsolved
 	/*Display message for incorrect guesses*/
 	LDR R0, =outNotFound
 	BL printf

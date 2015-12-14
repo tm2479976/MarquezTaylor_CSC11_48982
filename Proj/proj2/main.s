@@ -46,7 +46,7 @@ randomize:
     	BL srand
     	BL rand
     	MOV R1, R0, ASR #1
-    	MOV R2, #5
+    	MOV R2, #6
     	BL divMod
 
 	CMP R1, #0	@branch if random number was 0
