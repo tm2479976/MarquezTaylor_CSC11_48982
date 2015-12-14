@@ -37,15 +37,21 @@ unknown: .skip 24
 word0:
 	PUSH {lr}
 	SUB sp, sp, #24		@make room for 6 integers in the stack
-
+	
 	MOV R4, #6		@remaining chances
 	MOV R5, #6		@unsolved letters
 	LDR R6, =unknown	@'*' as placeholer for unsolved letters
-	MOV R7, #42
 	MOV R8, sp
-	LDR R9, =words
+	LDR R9, =words	
+
+	LSL R1, R1, #3 
+	SUB R2, R1, #4
+	LDR R3, =index
+	LDR R10, [R3, +R1]
+	LDR R11, [R3, +R2]
 
 	/*initialize unknown*/
+	MOV R7, #42
 	STR R7, [R6]
 	STR R7, [R6, +#4]
 	STR R7, [R6, +#8]
@@ -54,22 +60,18 @@ word0:
 	STR R7, [R6, +#20]
 
 	/*set local array*/
-	LDR R7, [R9]
+	LDR R7, [R9, +R10]
 	STR R7, [R8]
-	LDR R7, [R9, +#4]
+	LDR R7, [R9, +R10]
 	STR R7, [R8, +#4]
-	LDR R7, [R9, +#8]
+	LDR R7, [R9, +R10]
 	STR R7, [R8, +#8]
-	LDR R7, [R9, +#12]
+	LDR R7, [R9, +R10]
 	STR R7, [R8, +#12]
-	LDR R7, [R9, +#16]
+	LDR R7, [R9, +R10]
 	STR R7, [R8, +#16]
-	LDR R7, [R9, +#20]
+	LDR R7, [R9, +R10]
 	STR R7, [R8, +#20]
-
-	MOV R9, #42
-	MOV R10, #42
-	MOV R11, #42
 
 loop:
 	/*Display in sets of three*/
