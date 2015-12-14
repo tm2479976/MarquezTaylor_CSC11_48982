@@ -30,8 +30,8 @@ outFailure: .asciz "You died...\nThe word you were looking for was %c%c%c"
 .balign 4
 outSuccess: .asciz "Congratulations you figured it out!\nThe answer was %c%c%c"
 
-balign 4
-outScore: .asciz "Your score for this round was %f!!!\n"
+.balign 4
+outScore: .asciz "Your score for this round was %f \n"
 
 .balign
 unknown: .skip 24
@@ -41,7 +41,7 @@ unknown: .skip 24
 	.global word0
 
 word0:
-	PUSH {lr}
+	PUSH {R4, lr}
 	SUB sp, sp, #24		@make room for 6 integers in the stack
 
 	MOV R4, #6		@remaining chances
@@ -49,6 +49,7 @@ word0:
 	LDR R6, =unknown	@array for portion of mystery word solved
 	MOV R8, sp		@array for mystery word
 	LDR R9, =words		@master list of words to take mystery word from
+	MOV R11, #0		@counter for number of guesses
 
 	MOV R0, #4
 	MUL R1, R1, R0
@@ -84,8 +85,8 @@ word0:
 	STR R7, [R8, +#20]
 
 loop:
+	ADD R11, R11, #1	@guess++
 	MOV R9, #0		@counter to check if guessed letter is in mystery word
-	MOV R11, #0		@counter for number of guesses
 
 	/*Display in sets of three*/
 	LDR R0, =outLetter
@@ -114,8 +115,8 @@ loop:
 	CMP R1, R7		@check for repeat guess
 	BEQ used
 	MOV R7, R1		@reveal first letter
-	STR R7, [R6]		
-	SUB R5, R5, #1		@unsolvedletters-- 
+	STR R7, [R6]
+	SUB R5, R5, #1		@unsolvedletters--
 
 letter2:
 	LDR R7, [R8, +#4]
@@ -127,7 +128,7 @@ letter2:
 	BEQ used
 	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#4]
-	SUB R5, R5, #1		@unsolvedletters-- 
+	SUB R5, R5, #1		@unsolvedletters--
 
 letter3:
 	LDR R7, [R8, +#8]
@@ -139,7 +140,7 @@ letter3:
 	BEQ used
 	MOV R7, R1		@reveal letter
 	STR R7, [R6, +#8]
-	SUB R5, R5, #1		@unsolvedletters-- 
+	SUB R5, R5, #1		@unsolvedletters--
 
 letter4:
 	LDR R7, [R8, +#12]
@@ -241,33 +242,38 @@ success:
 	B score
 
 score:
-	/*initialize floating point registers*/
-	MOV R0, #6
-	MOV R1, #100
-	VMOV S14, R0		@length of word=wl
+	/*initalize floating point registers*/
+	MOV R6, #6
+	MOV R7, #100
+	VMOV S14, R6		@length of word=wl
 	VMOV S16, R4		@chances remaining=cr
 	VMOV S18, R5		@unsolved letters=ul
 	VMOV S20, R11		@number of guesses=ng
-	VMOV S22, R1		@score modifier=sm
+	VMOV S22, R7		@score modifier=sm
 
+	/*convert to F32*/
+	VCVT.F32.U32 S14, S14
+	VCVT.F32.U32 S16, S16
+	VCVT.F32.U32 S18, S18
+	VCVT.F32.U32 S20, S20
+	VCVT.F32.U32 S22, S22
+calc:
 	/*calculations*/
-	VDIV.F32 S16, S16, S14	@s1 = cd/wl
+	VDIV.F32 S16, S16, S14	@s1 = cr/wl
 	VDIV.F32 S18, S18, S14	@s2 = ul/wl
 	VDIV.F32 S20, S14, S20	@s3 = wl/ng
 	VADD.F32 S16, S16, S18	@s4 = s1+s2
 	VADD.F32 S20, S20, S16	@s5 = s3+s4
 	VMUL.F32 S20, S20, S22  @final scoce = s5*sm
-	VCVT.F64.F32 D0, S20	@convert score for output
-
+print:
 	/*output*/
 	LDR R0, =outScore
+	VCVT.F64.F32 D0, S20	@convert score for output
 	VMOV R2, R3, D0
-	BL printf	
+	BL printf
 
 finish:
 	/*return to main*/
 	ADD sp, sp, #24
-	POP {lr}
+	POP {R4, lr}
 	BX lr
-
-//inLetterAddr: .word inLetter
