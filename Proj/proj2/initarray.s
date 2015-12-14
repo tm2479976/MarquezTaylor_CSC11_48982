@@ -4,21 +4,21 @@
 
 initArray:
 	PUSH {R4, lr}
-	LDR R1, wordsAddr
+	LDR R1, =words
 	LDR R2, indexAddr
 
 	/*initialize 'pidgey'*/
-	MOV R3, #113		@'p'
+	MOV R5, #112		@'p'
 	STR R5, [R1]
-	MOV R3, #105		@'i'
+	MOV R5, #105		@'i'
 	STR R5, [R1, +#4]
-	MOV R3, #100		@'d'
+	MOV R5, #100		@'d'
 	STR R5, [R1, +#8]
-	MOV R3, #103		@'g'
+	MOV R5, #103		@'g'
 	STR R5, [R1, +#12]
-	MOV R3, #101		@'e'
+	MOV R5, #101		@'e'
 	STR R5, [R1, +#16]
-	MOV R3, #121		@'y'
+	MOV R5, #121		@'y'
 	STR R5, [R1, +#20]
 
 	MOV R3, #0		@location in words

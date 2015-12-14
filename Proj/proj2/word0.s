@@ -36,16 +36,16 @@ unknown: .skip 24
 
 word0:
 	PUSH {lr}
-	SUB sp, sp, #24		@make room for 6 4 integers in the stack
+	SUB sp, sp, #24		@make room for 6 integers in the stack
 
 	MOV R4, #6		@remaining chances
 	MOV R5, #6		@unsolved letters
 	LDR R6, =unknown	@'*' as placeholer for unsolved letters
 	MOV R7, #42
 	MOV R8, sp
-	LDR R9, =word
+	LDR R9, =words
 
-	/*initialize unkown*/
+	/*initialize unknown*/
 	STR R7, [R6]
 	STR R7, [R6, +#4]
 	STR R7, [R6, +#8]
