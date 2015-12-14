@@ -42,7 +42,7 @@ word0:
 	MOV R5, #6		@unsolved letters
 	LDR R6, =unknown	@'*' as placeholer for unsolved letters
 	MOV R7, #42
-	LDR R8, =sp
+	MOV R8, sp
 
 	STR R7, [R6]
 	STR R7, [R6, +#4]
@@ -51,17 +51,17 @@ word0:
 	STR R7, [R6, +#16]
 	STR R7, [R6, +#20]
 
-	LDR R7, #112
+	MOV R7, #112
 	STR R7, [R8]
-	LDR R7, #105
+	MOV R7, #105
 	STR R7, [R8, +#4]
-	LDR R7, #100
+	MOV R7, #100
 	STR R7, [R8, +#8]
-	LDR R7, #103
+	MOV R7, #103
 	STR R7, [R8, +#12]
-	LDR R7, #101
+	MOV R7, #101
 	STR R7, [R8, +#16]
-	LDR R7, #121
+	MOV R7, #121
 	STR R7, [R8, +#20]
 
 	MOV R9, #42
@@ -85,7 +85,7 @@ loop:
 	LDR R0, =scanPattern
 	LDR R1, =inLetter
 	BL scanf
-	LDR R1, inLetterAddr
+	LDR R1, =inLetter
 	LDR R1, [R1]
 
 	LDR R7, [R8]
@@ -215,4 +215,4 @@ finish:
 	POP {lr}
 	BX lr
 
-inLetterAddr: .word inLetter
+//inLetterAddr: .word inLetter
