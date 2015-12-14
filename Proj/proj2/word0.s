@@ -62,9 +62,9 @@ loop:
 	BL printf
 
 	LDR R0, =outLetter2
-	MOV R1, [R6, +#12]		@fourth letter
-	MOV R2, [R6, +#16]		@fifth letter
-	MOV R3, [R6, +#20]		@sixth letter
+	LDR R1, [R6, +#12]		@fourth letter
+	LDR R2, [R6, +#16]		@fifth letter
+	LDR R3, [R6, +#20]		@sixth letter
 	BL printf
 
 	LDR R0, =scanPattern
@@ -190,6 +190,7 @@ success:
 
 finish:
 	/*return to main*/
+	ADD sp, sp, #24
 	POP {lr}
 	BX lr
 
