@@ -42,13 +42,28 @@ word0:
 	MOV R5, #6		@unsolved letters
 	LDR R6, =unknown	@'*' as placeholer for unsolved letters
 	MOV R7, #42
+	LDR R8, =sp
+
 	STR R7, [R6]
 	STR R7, [R6, +#4]
 	STR R7, [R6, +#8]
 	STR R7, [R6, +#12]
 	STR R7, [R6, +#16]
 	STR R7, [R6, +#20]
-	MOV R8, #42
+
+	LDR R7, #112
+	STR R7, [R8]
+	LDR R7, #105
+	STR R7, [R8, +#4]
+	LDR R7, #100
+	STR R7, [R8, +#8]
+	LDR R7, #103
+	STR R7, [R8, +#12]
+	LDR R7, #101
+	STR R7, [R8, +#16]
+	LDR R7, #121
+	STR R7, [R8, +#20]
+
 	MOV R9, #42
 	MOV R10, #42
 	MOV R11, #42
@@ -73,22 +88,28 @@ loop:
 	LDR R1, inLetterAddr
 	LDR R1, [R1]
 
-	CMP R1, #112		@check if inLetter = 'p'
+	LDR R7, [R8]
+	CMP R1, R7		@check if inLetter = 'p'
 	BEQ letterp
 
-	CMP R1, #105		@check if inLetter = 'i'
+	LDR R7, [R8, +#4]
+	CMP R1, R7		@check if inLetter = 'i'
 	BEQ letteri
 
-	CMP R1, #100		@check if inLetter = 'd'
+	LDR R7, [R8, +#8]
+	CMP R1, R7		@check if inLetter = 'd'
 	BEQ letterd
 
-	CMP R1, #103		@check if inLetter = 'g'
+	LDR R7, [R8, +#12]
+	CMP R1, R7		@check if inLetter = 'g'
 	BEQ letterg
 
-	CMP R1, #101		@check if inLetter = 'e'
+	LDR R7, [R8, +#16]
+	CMP R1, R7		@check if inLetter = 'e'
 	BEQ lettere
 
-	CMP R1, #121		@check if inLetter = 'y'
+	LDR R7, [R8, +#20]
+	CMP R1, R7		@check if inLetter = 'y'
 	BEQ lettery
 
 	B notFound		@branch if none of the above
